@@ -1,18 +1,39 @@
 services:
   - type: web
-    name: laravel-ecommerce
-    runtime: docker
+    name: laravel-app
+    env: php
     plan: free
     buildCommand: |
       composer install --no-dev --optimize-autoloader
-      php artisan key:generate --force
-      php artisan config:cache
-      php artisan route:cache
-      php artisan view:cache
+      php artisan key:generate
+      php artisan migrate --force
+    startCommand: php artisan serve --host 0.0.0.0 --port $PORT
     envVars:
       - key: APP_ENV
         value: production
       - key: APP_DEBUG
-        value: "false"
-      - key: LOG_CHANNEL
-        value: stderr
+        value: false
+      - key: APP_KEY
+        sync: false
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        fromDatabase:
+          name: mydb
+          property: host
+      - key: DB_DATABASE
+        fromDatabase:
+          name: mydb
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: mydb
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: mydb
+          property: password
+databases:
+  - name: mydb
+    plan: free
+    engine: mysql

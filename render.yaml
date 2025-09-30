@@ -1,6 +1,7 @@
 services:
   - type: web
     name: laravel-app
+    runtime: docker
     env: php
     plan: free
     buildCommand: |

@@ -41,4 +41,4 @@ services:
 databases:
   - name: mydb
     plan: free
-    engine: postgres
+    engine: mysql
